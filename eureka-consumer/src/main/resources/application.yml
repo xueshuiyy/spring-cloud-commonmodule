@@ -1,0 +1,60 @@
+server:
+  port: 8001
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://www.lin.com:8761/eureka/
+  instance:
+    prefer-ip-address: true
+spring:
+  application:
+    name: consumer-user1
+
+ribbon:
+  ReadTimeout: 2000
+  ConnectTimeout: 2000
+  OkToRetryOnAllOperations: true #对所有操作请求都进行重试(false表示只对get方法进行重试,true对所有的方法进行重试 但是需要注意的接口的幂等性)
+  MaxAutoRetries: 1 #对当前实例的重试次数
+  MaxAutoRetriesNextServer: 1 #切换实例的重试次数
+
+# 默认是关闭的
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    OrderClient#getOrders(String): # 可以设置指定的方法
+      circuitBreaker:
+        enabled: false
+#        requestVolumeThreshold: 5 #时间窗口中，请求的的次数失败的次数达到该值，熔断器就直接打开.
+#        errorThresholdPercentage: 10  #时间窗口内，请求失败此事/请求总次数>60就直接打开
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 5000 #全局超时配置
+#      metrics:
+#        rollingStats:
+#          sleepWindowInMilliseconds: 15000 #设置时间滑动窗口(默认10s)
+#          timeInMilliseconds: 10000 #当熔断器打开的时候，多长时间内会拒绝所有的请求直接调用降级方法,过了该值就进入半开状态
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 7000 # (MaxAutoRetries + MaxAutoRetriesNextServer + 本次调用) * ReadTimeout
+    default:
+      circuitBreaker:
+        enabled: true
+            # 局部关闭熔断：
+#            hystrix.command.<HystrixCommandKey>.circuitBreaker.enabled: false
+#            其中的<HystrixCommandKey> ，是个变量，可以打开服务的hystrix.stream 端点即可看到，也可在Hystrix Dashboard中查看。
+# 关闭熔断： 不会进入降级方法
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
