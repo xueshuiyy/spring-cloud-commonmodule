@@ -11,7 +11,7 @@
     <groupId>lin.feign.consumer</groupId>
     <artifactId>demo1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo1</name>
+    <name>eureka-consumer-demo1</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

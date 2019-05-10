@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>lin.feign.consumer</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>eureka-consumer-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
+    <name>eureka-consumer-demo</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
